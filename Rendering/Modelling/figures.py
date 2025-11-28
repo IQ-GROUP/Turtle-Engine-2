@@ -5,19 +5,22 @@ from typing import List
 from g4f.gui.server.website import render
 
 from Rendering import renderer
+from Rendering.Comps.Styling.styling import Style
 from Rendering.Comps.transform import Transform
 from Rendering.Comps.vectors import Vector3
 from Rendering.Comps.polygon import Polygon
+from Rendering.Maths.transformApplier import TransformApplier
 
 
 class Parallelepiped:
-    def __init__(self, transform: Transform, width=0, height=0, depth=0):
+    def __init__(
+            self,
+            transform: Transform,
+            style: Style = Style(),
+    ):
         self.transform = transform
-        self.width = width
-        self.height = height
-        self.depth = depth
+        self.style = style
 
-    # Diagram
     #   5____________6
     #  / |          /|
     # 1____________2 | h  y
@@ -32,9 +35,14 @@ class Parallelepiped:
         y = self.transform.position.y
         z = self.transform.position.z
 
-        hw = self.width / 2
-        hh = self.height / 2
-        hd = self.depth / 2
+        scale = self.transform.scale
+        width = scale.x
+        height = scale.y
+        depth = scale.z
+
+        hw = width / 2
+        hh = height / 2
+        hd = depth / 2
         vertices = [
             Vector3(x + hw, y + hh, z + hd), #1
             Vector3(x - hw, y + hh, z + hd), #2
@@ -46,6 +54,11 @@ class Parallelepiped:
             Vector3(x - hw, y - hh, z - hd), #8
         ]
 
+        for i in range(len(vertices)):
+            vertex = vertices[i]
+            vertex = TransformApplier.apply_position(self.transform.position, vertex)
+            vertex = TransformApplier.apply_rotation(self.transform.rotation, vertex)
+            vertices[i] = vertex
         return vertices
 
     def get_polygons(self) -> List[Polygon]:
@@ -94,4 +107,5 @@ class Parallelepiped:
     def draw(self):
         polygons = self.get_polygons()
         for polygon in polygons:
+            polygon.style = self.style
             renderer._draw_polygon(polygon)

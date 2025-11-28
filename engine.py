@@ -5,6 +5,9 @@ import importlib
 from Behaviours.common import CommonBehaviour
 import asyncio
 
+from Rendering.Comps.vectors import Vector3
+
+
 def import_all_scripts():
     folder_path = os.path.join(os.path.dirname(__file__), "assets")
 
