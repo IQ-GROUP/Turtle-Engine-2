@@ -18,11 +18,9 @@ class Style:
     def __init__(
             self,
             showVertices: bool = True,
-            showEdges: bool = True,
-            edgesColor: Color = Color(RGBA(0, 0, 0, 1)),
             fillColor: Color = Color(RGBA(0, 0, 0, 0)),
+            backFaceCulling: bool = True,
     ):
         self.showVertices = showVertices
-        self.showEdges = showEdges
-        self.edgesColor = edgesColor
         self.fillColor = fillColor
+        self.backFaceCulling = backFaceCulling

@@ -41,3 +41,15 @@ class TransformApplier():
         x, y = x_new, y_new
 
         return Vector3(x, y, z)
+
+    @staticmethod
+    def apply_scale(
+            scale: Vector3 = Vector3.zero(),
+            vertex: Vector3 = Vector3.zero()
+    ) -> Vector3:
+
+        return Vector3(
+            vertex.x * scale.x,
+            vertex.y * scale.y,
+            vertex.z * scale.z
+        )

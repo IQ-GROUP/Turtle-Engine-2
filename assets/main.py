@@ -1,40 +1,38 @@
 #main.py
 
 from Behaviours.common import CommonBehaviour
-from Rendering.Comps.Styling.styling import Style
+from Rendering.Comps.Styling.styling import Style, Color, RGBA
 from Rendering.Comps.transform import Transform
-from Rendering.Modelling.figures import Parallelepiped
+from Rendering.Modelling.figures import Parallelepiped, Model
 from Rendering.renderer import *
 
 
 class Main(CommonBehaviour):
     def __init__(self):
-        self.tick = 0.1  # Tick time in seconds for 60FPS
+        self.tick = 0.0016  # Tick time in seconds for 60FPS
         self.enabled = True  # Flag to enable the script to run
 
     async def start(self):
-        Parallelepiped(
+        pass
+
+    xr = 45
+    yr = 0
+    zr = 0
+    async def update(self):
+        clear()
+        Model(
+            "Models/Donut.obj",
             Transform(
-                Vector3(0, 0, 0),
-                Vector3(45, -45, 0),
-                Vector3(200, 100, 50)
+                Vector3.zero(),
+                Vector3(self.xr, self.yr, self.zr),
+                Vector3(100, 100, 100)
             ),
             Style(
-                True,
-                True,
+                showVertices=False,
+                fillColor=Color(RGBA(0, 153, 153, 1)),
+                backFaceCulling=True
             )
         ).draw()
-
-    rx = 0
-    async def update(self):
-        # clear()
-        # p = Parallelepiped(
-        #     Transform(
-        #         Vector3(0, 0, 0),
-        #         Vector3(self.rx, 0, 0),
-        #         Vector3(200, 100, 50),
-        #     )
-        # )
-        # self.rx += 1
-        # p.draw()
+        self.yr += 1
+        self.zr += 1
         alive()

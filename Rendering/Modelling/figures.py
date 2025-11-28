@@ -2,7 +2,7 @@
 
 from typing import List
 
-from g4f.gui.server.website import render
+import os
 
 from Rendering import renderer
 from Rendering.Comps.Styling.styling import Style
@@ -109,3 +109,56 @@ class Parallelepiped:
         for polygon in polygons:
             polygon.style = self.style
             renderer._draw_polygon(polygon)
+
+class Model:
+    def __init__(
+            self,
+            path: str,
+            transform: Transform,
+            style: Style = Style()
+    ):
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../assets"))
+        full_path = os.path.join(base_dir, path)
+        self.path = full_path
+
+        self.transform = transform
+        self.style = style
+        self.vertices: List[Vector3] = []
+        self.faces: List[List[int]] = []
+
+        self.load_obj(full_path)
+
+    def load_obj(self, path: str):
+        with open(path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("v "):
+                    _, x, y, z = line.split()
+                    self.vertices.append(Vector3(float(x), float(y), float(z)))
+                elif line.startswith("f "):
+                    indices = []
+                    for part in line.split()[1:]:
+                        index = part.split("/")[0]
+                        indices.append(int(index) - 1)
+                    if len(indices) >= 3:
+                        self.faces.append(indices)
+
+    def get_polygons(self) -> List[Polygon]:
+        transformed_vertices = []
+        for v in self.vertices:
+            scaled = TransformApplier.apply_scale(self.transform.scale, v)
+            pos = TransformApplier.apply_position(self.transform.position, scaled)
+            rotated = TransformApplier.apply_rotation(self.transform.rotation, pos)
+            transformed_vertices.append(rotated)
+
+        polygons = []
+        for face in self.faces:
+            poly_vertices = [transformed_vertices[i] for i in face]
+            polygons.append(Polygon(poly_vertices))
+        return polygons
+
+    def draw(self):
+        """Draw all polygons with the assigned style"""
+        for poly in self.get_polygons():
+            poly.style = self.style
+            renderer._draw_polygon(poly)
