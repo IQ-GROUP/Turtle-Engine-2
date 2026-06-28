@@ -2,9 +2,8 @@
 
 from Behaviours.common import CommonBehaviour
 from Rendering.Modelling.figures import Parallelepiped
-from Rendering.Comps.vectors import Vector3
 from Rendering.renderer import alive, clear
-from Rendering.Comps.transform import Transform
+from Rendering.Comps.screenTransform import ScreenTransform
 from engine import name
 
 import asyncio
@@ -37,7 +36,7 @@ class DebugConsole(CommonBehaviour):
 
             clear()
             self.current_shape(
-                transform=Transform(
+                transform=ScreenTransform(
                     position=self.transform,
                     rotation=Point(self.rx, self.ry, 0)
                 ),
@@ -92,7 +91,7 @@ class DebugConsole(CommonBehaviour):
                 # draw once if no animation
                 clear()
                 shapes[shape_id](
-                    transform=Transform(
+                    transform=ScreenTransform(
                         position=Point(px, py, pz),
                         rotation=Point(rx, ry, rz),
                     ),

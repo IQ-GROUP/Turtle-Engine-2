@@ -3,7 +3,7 @@
 import turtle as t
 
 from Rendering.Comps.polygon import Polygon
-from Rendering.Comps.vectors import Vector2, Vector3
+from Shared.Comps.vectors import Vector2, Vector3
 
 #default configuration
 t.hideturtle()

@@ -5,9 +5,6 @@ import importlib
 from Behaviours.common import CommonBehaviour
 import asyncio
 
-from Rendering.Comps.vectors import Vector3
-
-
 def import_all_scripts():
     folder_path = os.path.join(os.path.dirname(__file__), "assets")
 
@@ -27,7 +24,7 @@ def import_debug_scripts():
             importlib.import_module(full_module)
 
 name = "TV2"
-debug = False
+debug = True
 
 async def main():
     print(f"{name}: Booting...")

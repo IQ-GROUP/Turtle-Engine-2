@@ -1,7 +1,7 @@
 from typing import List
 
 from Rendering.Comps.Styling.styling import Style
-from Rendering.Comps.vectors import Vector3
+from Shared.Comps.vectors import Vector3
 
 
 class Polygon:

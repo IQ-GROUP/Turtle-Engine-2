@@ -6,16 +6,16 @@ import os
 
 from Rendering import renderer
 from Rendering.Comps.Styling.styling import Style
-from Rendering.Comps.transform import Transform
-from Rendering.Comps.vectors import Vector3
+from Rendering.Comps.screenTransform import ScreenTransform
+from Shared.Comps.vectors import Vector3
 from Rendering.Comps.polygon import Polygon
-from Rendering.Maths.transformApplier import TransformApplier
+from Rendering.Maths.screenTransformApplier import ScreenTransformApplier
 
 
 class Parallelepiped:
     def __init__(
             self,
-            transform: Transform,
+            transform: ScreenTransform = ScreenTransform(),
             style: Style = Style(),
     ):
         self.transform = transform
@@ -56,8 +56,8 @@ class Parallelepiped:
 
         for i in range(len(vertices)):
             vertex = vertices[i]
-            vertex = TransformApplier.apply_position(self.transform.position, vertex)
-            vertex = TransformApplier.apply_rotation(self.transform.rotation, vertex)
+            vertex = ScreenTransformApplier.apply_position(self.transform.position, vertex)
+            vertex = ScreenTransformApplier.apply_rotation(self.transform.rotation, vertex)
             vertices[i] = vertex
         return vertices
 
@@ -114,7 +114,7 @@ class Model:
     def __init__(
             self,
             path: str,
-            transform: Transform,
+            transform: ScreenTransform = ScreenTransform(),
             style: Style = Style()
     ):
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../assets"))
@@ -146,9 +146,9 @@ class Model:
     def get_polygons(self) -> List[Polygon]:
         transformed_vertices = []
         for v in self.vertices:
-            scaled = TransformApplier.apply_scale(self.transform.scale, v)
-            pos = TransformApplier.apply_position(self.transform.position, scaled)
-            rotated = TransformApplier.apply_rotation(self.transform.rotation, pos)
+            scaled = ScreenTransformApplier.apply_scale(self.transform.position, self.transform.scale, v)
+            pos = ScreenTransformApplier.apply_position(self.transform.position, scaled)
+            rotated = ScreenTransformApplier.apply_rotation(self.transform.rotation, pos)
             transformed_vertices.append(rotated)
 
         polygons = []

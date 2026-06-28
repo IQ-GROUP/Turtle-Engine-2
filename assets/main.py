@@ -1,8 +1,10 @@
 #main.py
 
 from Behaviours.common import CommonBehaviour
+from Objecting.Comps.object import Object
+from Objecting.Comps.transform import Transform
 from Rendering.Comps.Styling.styling import Style, Color, RGBA
-from Rendering.Comps.transform import Transform
+from Rendering.Comps.screenTransform import ScreenTransform
 from Rendering.Modelling.figures import Parallelepiped, Model
 from Rendering.renderer import *
 
@@ -12,27 +14,37 @@ class Main(CommonBehaviour):
         self.tick = 0.0016  # Tick time in seconds for 60FPS
         self.enabled = True  # Flag to enable the script to run
 
-    async def start(self):
-        pass
+    sphere_mesh = Model(
+        "Models/B.obj",
+        ScreenTransform(),
+        Style(
+            showVertices=False
+        )
+    )
 
-    xr = 45
-    yr = 0
-    zr = 0
+    sphere = Object(
+            Transform(
+                position=Vector3(0, 0, -1),
+                rotation=Vector3(-45, 0, 0),
+                scale=Vector3(20, 20, 20),
+            ),
+            sphere_mesh
+    )
+
+    async def start(self):
+       pass
+
+    rx= 0
+    ry = 0
+    rz = 0
+    rate = 1
     async def update(self):
         clear()
-        Model(
-            "Models/Donut.obj",
-            Transform(
-                Vector3.zero(),
-                Vector3(self.xr, self.yr, self.zr),
-                Vector3(100, 100, 100)
-            ),
-            Style(
-                showVertices=False,
-                fillColor=Color(RGBA(0, 153, 153, 1)),
-                backFaceCulling=True
-            )
-        ).draw()
-        self.yr += 1
-        self.zr += 1
+        self.sphere.transform.rotation.x = self.rx
+        self.sphere.transform.rotation.y = self.ry
+        self.sphere.transform.rotation.z = self.rz
+        self.sphere.spawn()
+        self.rx += self.rate
+        self.ry += self.rate
+        self.rz += self.rate
         alive()

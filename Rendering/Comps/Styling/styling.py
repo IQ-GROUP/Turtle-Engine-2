@@ -18,7 +18,7 @@ class Style:
     def __init__(
             self,
             showVertices: bool = True,
-            fillColor: Color = Color(RGBA(0, 0, 0, 0)),
+            fillColor: Color = Color(RGBA(0, 153, 153, 1)),
             backFaceCulling: bool = True,
     ):
         self.showVertices = showVertices

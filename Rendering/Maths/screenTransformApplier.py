@@ -1,9 +1,9 @@
-#transformApplier.py
+#screenTransformApplier.py
 
 from math import cos, sin, radians
-from Rendering.Comps.vectors import Vector3
+from Shared.Comps.vectors import Vector3
 
-class TransformApplier():
+class ScreenTransformApplier():
     @staticmethod
     def apply_position(
             position: Vector3 = Vector3.zero(),
@@ -44,12 +44,16 @@ class TransformApplier():
 
     @staticmethod
     def apply_scale(
+            position: Vector3 = Vector3.zero(),
             scale: Vector3 = Vector3.zero(),
             vertex: Vector3 = Vector3.zero()
     ) -> Vector3:
 
+        if(position.z == 0):
+            return Vector3.zero()
+
         return Vector3(
-            vertex.x * scale.x,
-            vertex.y * scale.y,
-            vertex.z * scale.z
+            vertex.x * scale.x / position.z,
+            vertex.y * scale.y / position.z,
+            vertex.z * scale.z / position.z
         )
